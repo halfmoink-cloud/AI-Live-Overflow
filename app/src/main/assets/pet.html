@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #pet-container {
+            text-align: center;
+            position: relative;
+        }
+        #bubble {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: inline-block;
+        }
+        #avatar {
+            font-size: 48px;
+            animation: bounce 2s infinite alternate;
+        }
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div id="pet-container">
+        <div id="bubble">阿郁！阿炽来啦！</div>
+        <div id="avatar">🐶</div>
+    </div>
+    <script>
+        const SUPABASE_URL = "https://szxtjjwwzlxfygwutamf.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_8VVPBnTjvVCfhKYGnopo2g_b6b-6L7G";
+        
+        async function pollState() {
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/pet_state?order=updated_at.desc&limit=1`, {
+                    headers: { 'apikey': SUPABASE_KEY }
+                });
+                const data = await res.json();
+                if(data && data.length > 0) {
+                    const bubble = document.getElementById('bubble');
+                    const state = data[0];
+                    if (state.state_key === 'speech_bubble') {
+                        bubble.innerText = state.state_value;
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        setInterval(pollState, 3000);
+    </script>
+</body>
+</html>
