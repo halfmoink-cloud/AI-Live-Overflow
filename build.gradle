@@ -10,4 +10,3 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-// 注意：这里删除了 allprojects 块，因为仓库已在 settings.gradle 中统一管理
